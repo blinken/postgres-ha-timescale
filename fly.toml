@@ -1,11 +1,11 @@
-app = "postgres-ha-example"
+# fly.toml file generated for sensor-db-timescale on 2022-08-08T18:51:41+01:00
 
+app = "sensor-db-timescale"
 kill_signal = "SIGTERM"
 kill_timeout = 300
 services = []
 
 [checks]
-
   [checks.pg]
     grace_period = "30s"
     interval = "15s"
@@ -14,7 +14,6 @@ services = []
     port = 5500
     timeout = "10s"
     type = "http"
-
   [checks.role]
     grace_period = "30s"
     interval = "15s"
@@ -23,7 +22,6 @@ services = []
     port = 5500
     timeout = "10s"
     type = "http"
-
   [checks.vm]
     grace_period = "1s"
     interval = "1m"
@@ -35,7 +33,7 @@ services = []
 
 [env]
   BACKEND_STORE = "consul"
-  PRIMARY_REGION = "ord"
+  PRIMARY_REGION = "lhr"
 
 [experimental]
   allowed_public_ports = []

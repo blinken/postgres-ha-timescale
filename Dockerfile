@@ -34,7 +34,20 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     ca-certificates curl bash dnsutils vim-tiny procps jq haproxy \
     postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
     postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \    
+    wget \
+    postgresql-common \
+    lsb-release \
     && apt autoremove -y
+
+RUN sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+
+RUN sh -c "echo 'deb [signed-by=/usr/share/keyrings/timescale.keyring] https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main' > /etc/apt/sources.list.d/timescaledb.list"
+RUN wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey 2>&1 | gpg --dearmor -o /usr/share/keyrings/timescale.keyring
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    timescaledb-2-postgresql-$PG_MAJOR \
+    timescaledb-tools
+
 
 COPY --from=stolon /go/src/app/bin/* /usr/local/bin/
 COPY --from=postgres_exporter /postgres_exporter /usr/local/bin/
